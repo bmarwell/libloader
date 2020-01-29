@@ -13,6 +13,10 @@ The *Native LibLoader* aims to provide such a mechanism.
 It was inspired by the https://github.com/scijava/native-lib-loader[scijava/native-lib-loader]
 and the https://github.com/trustin/os-maven-plugin[trustin/os-maven-plugin].
 
+== Requirements
+
+This library only requires *Java 6* and has *no runtime dependencies*.
+
 == Enhancements
 
 This library loader has the following advancements over the existing lib loaders:
