@@ -18,6 +18,8 @@
 package io.github.java_native.libloader.config;
 
 import io.github.java_native.libloader.systems.SystemDefinition;
+import io.github.java_native.libloader.systems.linux.LinuxArm32HardFloat;
+import io.github.java_native.libloader.systems.linux.LinuxArm32SoftFloat;
 import io.github.java_native.libloader.systems.linux.LinuxX8632;
 import io.github.java_native.libloader.systems.linux.LinuxX8664;
 import io.github.java_native.libloader.systems.osx.MacOsxX8664;
@@ -40,6 +42,8 @@ public class DefaultLibLoaderConfig implements LibLoaderConfig {
     private static final List<SystemDefinition> DEFAULT_SYSTEMS = Arrays.<SystemDefinition>asList(
             new LinuxX8632(),
             new LinuxX8664(),
+            new LinuxArm32SoftFloat(),
+            new LinuxArm32HardFloat(),
             new MacOsxX8664(),
             new WindowsX8632(),
             new WindowsX8664()

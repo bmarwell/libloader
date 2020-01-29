@@ -17,8 +17,8 @@
   -->
 
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns="http://maven.apache.org/POM/4.0.0"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <artifactId>native-libloader</artifactId>
 
     <dependencies>
@@ -39,6 +39,11 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <checkstyle.xml>${project.basedir}/build/checkstyle.xml</checkstyle.xml>
+
+        <surefireArgLine>
+            --illegal-access=permit
+            -Djava.util.logging.SimpleFormatter.format="[%4$-4.4s] %5$s%6$s%n"
+        </surefireArgLine>
     </properties>
 
     <version>1.0.0-SNAPSHOT</version>
@@ -53,6 +58,35 @@
                     <showWarnings>true</showWarnings>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.1.1</version>
+            </plugin>
+
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.1.0</version>
+            </plugin>
+
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <!-- m4 fails with :
+                  A required class was missing
+                  while executing org.apache.maven.plugins:maven-surefire-plugin:3.0.0-M4:test:
+                  org.apache.commons.codec.binary.Base64
+                -->
+                <version>3.0.0-M3</version>
+                <configuration>
+                    <argLine>${surefireArgLine} -Xmx512m</argLine>
+                </configuration>
+            </plugin>
+
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

@@ -18,6 +18,7 @@
 package io.github.java_native.libloader.systems;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public final class SystemDefinitionConstants {
@@ -51,6 +52,10 @@ public final class SystemDefinitionConstants {
     private static final List<String> ARCH_ITANIUM_64 = Arrays.asList(
             "itanium_64", "ia64", "ia64w", "itanium64"
     );
+
+    protected static final List<String> ARM_32_SF = Collections.unmodifiableList(Arrays.asList(
+            "arm_32", "arm", "arm32"
+    ));
 
     private SystemDefinitionConstants() {
         // util class.

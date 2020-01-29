@@ -19,6 +19,8 @@ package io.github.java_native.libloader;
 
 import io.github.java_native.libloader.config.DefaultLibLoaderConfig;
 import io.github.java_native.libloader.systems.SystemDefinition;
+import io.github.java_native.libloader.systems.linux.LinuxArm32HardFloat;
+import io.github.java_native.libloader.systems.linux.LinuxArm32SoftFloat;
 import io.github.java_native.libloader.systems.linux.LinuxX8632;
 import io.github.java_native.libloader.systems.linux.LinuxX8664;
 import io.github.java_native.libloader.systems.osx.MacOsxX8664;
@@ -26,6 +28,8 @@ import io.github.java_native.libloader.systems.windows.WindowsX8632;
 import io.github.java_native.libloader.systems.windows.WindowsX8664;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,6 +38,8 @@ import org.junit.runners.Parameterized.Parameters;
 
 @RunWith(Parameterized.class)
 public class ExtensibleNativeLibLoaderTest {
+
+    private static final Logger LOG = Logger.getLogger(ExtensibleNativeLibLoaderTest.class.getName());
 
     private final SystemDefinition systemDefinition;
     private final String libName;
@@ -49,9 +55,11 @@ public class ExtensibleNativeLibLoaderTest {
 
     @Parameters
     public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][]{
+        return Arrays.asList(new Object[][] {
                 {new LinuxX8664(), "jssc", "natives/linux-x86_64-64/libjssc.so"},
                 {new LinuxX8632(), "jssc", "natives/linux-x86_32-32/libjssc.so"},
+                {new LinuxArm32SoftFloat(), "jssc", "natives/linux-arm_32-32/libjssc.so"},
+                {new LinuxArm32HardFloat(), "jssc", "natives/linux-arm_32-32-hf/libjssc.so"},
                 {new MacOsxX8664(), "jssc", "natives/osx-x86_64-64/libjssc.dylib"},
                 {new WindowsX8664(), "jssc", "natives/windows-x86_64-64/jssc.dll"},
                 {new WindowsX8632(), "jssc", "natives/windows-x86_32-32/jssc.dll"},
@@ -63,9 +71,10 @@ public class ExtensibleNativeLibLoaderTest {
         final ExtensibleNativeLibLoader nativeLibLoader = new ExtensibleNativeLibLoader(new DefaultLibLoaderConfig());
         nativeLibLoader.setDetectedSystem(this.systemDefinition);
 
-        final String jssc = nativeLibLoader.getLibraryPackagePath(this.libName);
+        final String libraryPackagePath = nativeLibLoader.getLibraryPackagePath(this.libName);
+        LOG.log(Level.INFO, "assert e[" + this.expectedPath + "] == a[" + libraryPackagePath + "]");
 
-        Assert.assertEquals(this.expectedPath, jssc);
+        Assert.assertEquals(this.expectedPath, libraryPackagePath);
     }
 
 }

@@ -31,7 +31,7 @@ public class Demo {
 
         /* will load 'natives/linux-x86_64-64/libjssc.so' on linux. */
         final LibLoaderResult loadLibrary = libLoader.loadLibrary("jssc");
-        
+
         /* LibLoaderResult has no fields at the moment. */
     }
 }
@@ -82,6 +82,8 @@ Currently, the following systems are built in:
 
 * Linux x86_64 `natives/linux-x86_64-64`
 * Linux x86_32 `natives/linux-x86_32-32`
+* Linux arm_32 `natives/linux-arm_32-32`
+* Linux arm_32 with VFP registers `natives/linux-arm_32-32-hf`
 * MacOS x64_64 `natives/osx-x86_64-64`
 * Windows x86_64 `natives/windows-x86_64-64`
 * Windows x86_32 `natives/windows-x86_32-32`

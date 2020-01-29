@@ -18,6 +18,7 @@
 package io.github.java_native.libloader.systems;
 
 import io.github.java_native.libloader.internal.Nullable;
+import java.io.File;
 import java.util.Locale;
 
 /**
@@ -79,14 +80,32 @@ public enum CurrentSystemProperties implements SystemProperties {
     }
 
     private @Nullable String determineAbi() {
-        final @Nullable String sunArchAbi = System.getProperty("sun.arch.abi");
-        if (sunArchAbi != null) {
-            if (sunArchAbi.trim().endsWith("hf")) {
-                return "hf";
-            }
+        if (isArmHardFloat()) {
+            return "hf";
         }
 
         return null;
+    }
+
+    private boolean isArmHardFloat() {
+        if (!getArchitecture().contains("arm")) {
+            return false;
+        }
+
+        // e.g. sun.arch.abi=gnueabihf on openjdk and adoptopenjdk-hotspot.
+        final @Nullable String sunArchAbi = System.getProperty("sun.arch.abi");
+
+        if (sunArchAbi != null) {
+            if (sunArchAbi.trim().endsWith("hf")) {
+                return true;
+            }
+        }
+
+        // other VMs do not have this availability.
+        // try to locate file /lib/arm-linux-gnueabihf
+        return new File("/lib/arm-linux-gnueabihf").exists();
+
+        // we could also call readlink -A on $JAVA_HOME/bin/java and search for "VFP Registers".
     }
 
     private Endianess determineEndianess() {
