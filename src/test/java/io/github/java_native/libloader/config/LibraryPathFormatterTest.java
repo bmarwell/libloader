@@ -25,19 +25,20 @@ import org.junit.rules.ExpectedException;
 public class LibraryPathFormatterTest {
 
     @Rule
-    public ExpectedException expectedException = ExpectedException.none();
+    public final ExpectedException expectedException = ExpectedException.none();
 
     @Test
     public void testFormat_empty() {
-        final LibraryPathFormatter formatter = new LibraryPathFormatter();
+        final LibraryPathFormatter formatter = new DefaultLibraryPathFormatter();
         final LinuxX8664 linuxX8664 = new LinuxX8664();
         this.expectedException.expect(IllegalArgumentException.class);
         formatter.getFormattedPath(linuxX8664, "");
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     public void testFormat_null() {
-        final LibraryPathFormatter formatter = new LibraryPathFormatter();
+        final LibraryPathFormatter formatter = new DefaultLibraryPathFormatter();
         final LinuxX8664 linuxX8664 = new LinuxX8664();
         this.expectedException.expect(NullPointerException.class);
         formatter.getFormattedPath(linuxX8664, null);
@@ -45,7 +46,7 @@ public class LibraryPathFormatterTest {
 
     @Test
     public void testFormat_pathSeparator() {
-        final LibraryPathFormatter formatter = new LibraryPathFormatter();
+        final LibraryPathFormatter formatter = new DefaultLibraryPathFormatter();
         final LinuxX8664 linuxX8664 = new LinuxX8664();
         this.expectedException.expect(IllegalArgumentException.class);
         formatter.getFormattedPath(linuxX8664, ":;\\/");

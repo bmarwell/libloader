@@ -18,57 +18,26 @@
 package io.github.java_native.libloader.config;
 
 import io.github.java_native.libloader.systems.SystemDefinition;
-import java.io.File;
-import java.util.Locale;
 
-public class LibraryPathFormatter {
+/**
+ * A formatter takes a system definition and a library and will output a formatted path to load
+ * a library from. The path is to be loaded from within a jar file.
+ */
+public interface LibraryPathFormatter {
 
-    private static final String NATIVES_ROOT_FOLDER = "natives";
-    private static final String SEPARATOR = "-";
-    private static final String OS_NAME = "%1$s";
-    private static final String ARCH = "%2$s";
-    private static final String BITNESS = "%3$s";
-    public static final String DEFAULT_QUALIFIER_PATH = OS_NAME + SEPARATOR + ARCH + SEPARATOR + BITNESS;
-    private static final String QUALIFIER = "%4$s";
-    private static final String PREFIX_LIBNAME_SUFFIX = "%5$s%6$s%7$s";
-    private static final String FORMATTED_PATH_WITH_QUALIFIER = NATIVES_ROOT_FOLDER
-            + "/" + DEFAULT_QUALIFIER_PATH + SEPARATOR + QUALIFIER
-            + "/" + PREFIX_LIBNAME_SUFFIX;
-    private static final String FORMATTED_PATH_WITHOUT_QUALIFIER = NATIVES_ROOT_FOLDER
-            + "/" + DEFAULT_QUALIFIER_PATH
-            + "/" + PREFIX_LIBNAME_SUFFIX;
-
-    public String getFormattedPath(final SystemDefinition systemDefinition, final String libName) {
-        if (libName.isEmpty()) {
-            throw new IllegalArgumentException("Empty library name provided");
-        }
-
-        if (libName.contains(File.separator) || libName.contains(File.pathSeparator)) {
-            throw new IllegalArgumentException(
-                    "library name contains illegal characters: [" + libName + "]. "
-                            + "Do not use '" + File.separator + "' or '" + File.pathSeparator + "'.");
-        }
-
-        final String pathTemplate = getPathTemplate(systemDefinition);
-
-        return String.format(Locale.ENGLISH,
-                pathTemplate,
-                systemDefinition.getNormalizedOsName(),
-                systemDefinition.getArchitecture(),
-                systemDefinition.getBitness().getBitness(),
-                systemDefinition.getQualifier(),
-                systemDefinition.getLibraryPrefix(),
-                libName,
-                systemDefinition.getLibrarySuffix()
-        );
-    }
-
-    private String getPathTemplate(final SystemDefinition systemDefinition) {
-        if (systemDefinition.getQualifier() != null) {
-            return FORMATTED_PATH_WITH_QUALIFIER;
-        }
-
-        return FORMATTED_PATH_WITHOUT_QUALIFIER;
-    }
+    /**
+     * Returns a formatted path for the given library name and supplied system.
+     *
+     * @param systemDefinition
+     *         the system to generate the library load path for.
+     * @param libName
+     *         the library name to load, without prefix or suffix or file extension.
+     * @return the formatted path which can be loaded from a jar file.
+     * @throws IllegalArgumentException
+     *         if libName is empty or contains path separators or directory separators.
+     * @throws NullPointerException
+     *         if either parameter is {@code null}.
+     */
+    String getFormattedPath(SystemDefinition systemDefinition, String libName);
 
 }

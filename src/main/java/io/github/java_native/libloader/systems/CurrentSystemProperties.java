@@ -78,10 +78,8 @@ public enum CurrentSystemProperties implements SystemProperties {
         /* or, on linux, use `file java.home/bin/java`. */
     }
 
-    private @Nullable
-    String determineAbi() {
-        final @Nullable
-        String sunArchAbi = System.getProperty("sun.arch.abi");
+    private @Nullable String determineAbi() {
+        final @Nullable String sunArchAbi = System.getProperty("sun.arch.abi");
         if (sunArchAbi != null) {
             if (sunArchAbi.trim().endsWith("hf")) {
                 return "hf";

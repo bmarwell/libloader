@@ -29,13 +29,13 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * The default contfig used when no other config was provided.
+ * The default config used when no other config was provided.
  *
  * <p>Contains a number of system definitions shipped with this library.<br></p>
  */
 public class DefaultLibLoaderConfig implements LibLoaderConfig {
 
-    private static final LibraryPathFormatter LIBRARY_PATH_FORMATTER = new LibraryPathFormatter();
+    private static final LibraryPathFormatter LIBRARY_PATH_FORMATTER = new DefaultLibraryPathFormatter();
 
     private static final List<SystemDefinition> DEFAULT_SYSTEMS = Arrays.<SystemDefinition>asList(
             new LinuxX8632(),
@@ -47,16 +47,24 @@ public class DefaultLibLoaderConfig implements LibLoaderConfig {
 
     private final List<SystemDefinition> systems;
 
+    /**
+     * Generates a default config.
+     */
     public DefaultLibLoaderConfig() {
         this(new ArrayList<SystemDefinition>());
     }
 
+    /**
+     * Generates a default config with additional systems.
+     *
+     * @param additionalSystems
+     *         additional systems to be added to the list of known systems.
+     */
     public DefaultLibLoaderConfig(final List<SystemDefinition> additionalSystems) {
         final List<SystemDefinition> systems = new ArrayList<SystemDefinition>(DEFAULT_SYSTEMS);
         systems.addAll(additionalSystems);
         this.systems = Collections.unmodifiableList(systems);
     }
-
 
     @Override
     public LibraryPathFormatter getLibraryPathFormatter() {

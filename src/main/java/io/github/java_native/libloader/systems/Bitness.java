@@ -32,16 +32,27 @@ public enum Bitness {
         this.bitness = bitness;
     }
 
+    /**
+     * Try to read a bitness from input string without casting.
+     *
+     * <p>The input string will be trimmed.</p>
+     *
+     * @param bitnessString the input string to detect bitness from.
+     * @return the bitness, or {@link Bitness#UNKNOWN} if not known.
+     */
     public static Bitness fromString(final String bitnessString) {
         if (bitnessString == null || "".equals(bitnessString)) {
             return UNKNOWN;
         }
 
+        final String formattedInput = bitnessString.trim();
+
         for (final Bitness knownValue : values()) {
-            if (("" + knownValue.getBitness()).equals(bitnessString)) {
+            if (("" + knownValue.getBitness()).equals(formattedInput)) {
                 return knownValue;
             }
         }
+
         return UNKNOWN;
     }
 

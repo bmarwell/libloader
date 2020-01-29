@@ -36,21 +36,25 @@ import org.junit.runners.Parameterized.Parameters;
 public class ExtensibleNativeLibLoaderTest {
 
     private final SystemDefinition systemDefinition;
+    private final String libName;
     private final String expectedPath;
 
-    public ExtensibleNativeLibLoaderTest(final SystemDefinition systemDefinition, final String expectedPath) {
+    public ExtensibleNativeLibLoaderTest(final SystemDefinition systemDefinition,
+                                         final String libName,
+                                         final String expectedPath) {
         this.systemDefinition = systemDefinition;
+        this.libName = libName;
         this.expectedPath = expectedPath;
     }
 
     @Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {new LinuxX8664(), "natives/linux-x86_64-64/libjssc.so"},
-                {new LinuxX8632(), "natives/linux-x86_32-32/libjssc.so"},
-                {new MacOsxX8664(), "natives/osx-x86_64-64/libjssc.dylib"},
-                {new WindowsX8664(), "natives/windows-x86_64-64/jssc.dll"},
-                {new WindowsX8632(), "natives/windows-x86_32-32/jssc.dll"},
+                {new LinuxX8664(), "jssc", "natives/linux-x86_64-64/libjssc.so"},
+                {new LinuxX8632(), "jssc", "natives/linux-x86_32-32/libjssc.so"},
+                {new MacOsxX8664(), "jssc", "natives/osx-x86_64-64/libjssc.dylib"},
+                {new WindowsX8664(), "jssc", "natives/windows-x86_64-64/jssc.dll"},
+                {new WindowsX8632(), "jssc", "natives/windows-x86_32-32/jssc.dll"},
         });
     }
 
@@ -59,7 +63,7 @@ public class ExtensibleNativeLibLoaderTest {
         final ExtensibleNativeLibLoader nativeLibLoader = new ExtensibleNativeLibLoader(new DefaultLibLoaderConfig());
         nativeLibLoader.setDetectedSystem(this.systemDefinition);
 
-        final String jssc = nativeLibLoader.getLibraryPackagePath("jssc");
+        final String jssc = nativeLibLoader.getLibraryPackagePath(this.libName);
 
         Assert.assertEquals(this.expectedPath, jssc);
     }
