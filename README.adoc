@@ -1,0 +1,40 @@
+[[native-libloader]]
+= native-libloader
+
+A configurable and extendable loader for native libraries to use with JNI.
+
+== Description
+
+When using the https://docs.oracle.com/javase/8/docs/technotes/guides/jni/index.html[Java Native Interface], one faces the problem to ship the corresponding libraries (`.dll` for Windows, `.dylib` for Mac and `.so` for others) with their app.
+
+Imagine you could use a mechanism to load those from `.jar` files you included in your application.
+
+The *Native LibLoader* aims to provide such a mechanism.
+It was inspired by the https://github.com/scijava/native-lib-loader[scijava/native-lib-loader]
+and the https://github.com/trustin/os-maven-plugin[trustin/os-maven-plugin].
+
+== Enhancements
+
+This library loader has the following advancements over the existing lib loaders:
+
+* Configurable paths.
+If you do not use the standard convention, just supply your own
+`LibraryPathFormatter` in the config.
+* Extensible through various mechanisms.
+** Programatically: Add new Implementations of the interface `SystemDefinition` to the config.
+** Dynamically: Implement the SPI `SystemDefinitionProvider` and drop your `.jar` file in the classpath.
+* Prepared for the HardFloat- and https://developer.arm.com/architectures/instruction-sets/floating-point[SoftFloat-Distinction for ARM] platforms.
+
+== Naming convention
+
+The path names inside the `.jar` files are aligned to the https://github.com/trustin/os-maven-plugin/[os-maven-plugin].
+It follows the same conventions as the https://github.com/google/osdetector-gradle-plugin[osdetector-gradle-plugin].
+
+  osname-arch-bitness[-qualifier]
+
+* *OS names* are taken from `System.getProperty("os.name").getLowerCase(Locale.ENGLISH)`.
+* The **arch**itecture is normalized from `System.getProperty("os.name")`.
+* The *bitness* (bits in long) is added as an identifying measure, as the bitness of the JVM may not be the same as the operating system’s bitness. +
+  Example: You are running a 32bit jvm on a 64bit system.
+In this case, this should be `32`.
+* An *optional qualifier* can be added for add-on chips, like *_hf* for ARM.
