@@ -17,6 +17,28 @@ and the https://github.com/trustin/os-maven-plugin[trustin/os-maven-plugin].
 
 This library only requires *Java 6* and has *no runtime dependencies*.
 
+== Usage
+
+[source,java]
+----
+import io.github.java_native.libloader.LibLoader;
+import io.github.java_native.libloader.LibLoaderResult;
+import io.github.java_native.libloader.NativeLibLoader;
+
+public class Demo {
+    public static void main(String[] args) {
+        NativeLibLoader libLoader = LibLoader.getLibLoader();
+
+        /* will load 'natives/linux-x86_64-64/libjssc.so' on linux. */
+        final LibLoaderResult loadLibrary = libLoader.loadLibrary("jssc");
+        
+        /* LibLoaderResult has no fields at the moment. */
+    }
+}
+----
+
+The LibLoader is fully configurable, read below for more information.
+
 == Enhancements
 
 This library loader has the following advancements over the existing lib loaders:
@@ -53,3 +75,13 @@ It follows the same conventions as the https://github.com/google/osdetector-grad
   Example: You are running a 32bit jvm on a 64bit system.
 In this case, this should be `32`.
 * An *optional qualifier* can be added for add-on chips, like *_hf* for ARM.
+
+== Supported systems
+
+Currently, the following systems are built in:
+
+* Linux x86_64 `natives/linux-x86_64-64`
+* Linux x86_32 `natives/linux-x86_32-32`
+* MacOS x64_64 `natives/osx-x86_64-64`
+* Windows x86_64 `natives/windows-x86_64-64`
+* Windows x86_32 `natives/windows-x86_32-32`
