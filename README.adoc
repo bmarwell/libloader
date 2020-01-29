@@ -20,10 +20,21 @@ This library loader has the following advancements over the existing lib loaders
 * Configurable paths.
 If you do not use the standard convention, just supply your own
 `LibraryPathFormatter` in the config.
+
 * Extensible through various mechanisms.
 ** Programatically: Add new Implementations of the interface `SystemDefinition` to the config.
 ** Dynamically: Implement the SPI `SystemDefinitionProvider` and drop your `.jar` file in the classpath.
+
 * Prepared for the HardFloat- and https://developer.arm.com/architectures/instruction-sets/floating-point[SoftFloat-Distinction for ARM] platforms.
+
+* Overridable
+** The default formatter can be overridden using `-Dnative.libloader.systempath=libs/linux_64`.
+** You can also supply a custom formatter in a configuration.
+The system property `native.libloader.systempath` will take precedence, though.
+
+* Configurable
+** You can configure the temporary directory using the config, or using the system property `native.libloader.tempdir`.
+** The system property will take precedence.
 
 == Naming convention
 

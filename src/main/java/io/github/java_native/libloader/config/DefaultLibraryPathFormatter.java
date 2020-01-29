@@ -17,6 +17,7 @@
 
 package io.github.java_native.libloader.config;
 
+import io.github.java_native.libloader.internal.Nullable;
 import io.github.java_native.libloader.systems.SystemDefinition;
 import java.io.File;
 import java.util.Locale;
@@ -37,6 +38,8 @@ public class DefaultLibraryPathFormatter implements LibraryPathFormatter {
     private static final String FORMATTED_PATH_WITHOUT_QUALIFIER = NATIVES_ROOT_FOLDER
             + "/" + DEFAULT_QUALIFIER_PATH
             + "/" + PREFIX_LIBNAME_SUFFIX;
+
+    private static final @Nullable String OVERRIDE_PATH = System.getProperty("native.libloader.systempath", null);
 
     @Override
     public String getFormattedPath(final SystemDefinition systemDefinition, final String libName) {
@@ -64,12 +67,24 @@ public class DefaultLibraryPathFormatter implements LibraryPathFormatter {
         );
     }
 
-    private String getPathTemplate(final SystemDefinition systemDefinition) {
+    private static String getPathTemplate(final SystemDefinition systemDefinition) {
+        if (null != OVERRIDE_PATH) {
+            return getOverriddenPathTemplate(OVERRIDE_PATH);
+        }
+
+        return getDefaultPathTemplate(systemDefinition);
+    }
+
+    private static String getDefaultPathTemplate(final SystemDefinition systemDefinition) {
         if (systemDefinition.getQualifier() != null) {
             return FORMATTED_PATH_WITH_QUALIFIER;
         }
 
         return FORMATTED_PATH_WITHOUT_QUALIFIER;
+    }
+
+    private static String getOverriddenPathTemplate(final String overridePath) {
+        return overridePath + "/" + PREFIX_LIBNAME_SUFFIX;
     }
 
 }
