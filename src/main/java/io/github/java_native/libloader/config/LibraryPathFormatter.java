@@ -47,7 +47,7 @@ public interface LibraryPathFormatter {
      * <p>If version is empty, it will not be appended. In this case the output
      * is equal to {@link #getFormattedPaths(SystemDefinition, String)}.<br></p>
      *
-     * <p>Will also return everything which {@link #getFormattedPaths(SystemDefinition, String)} returns.<br></p>
+     * <p>Will <strong>not</strong> return anything which {@link #getFormattedPaths(SystemDefinition, String)} returns.<br></p>
      *
      * @param systemDefinition
      *         the system to generate the library load path for.

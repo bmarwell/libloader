@@ -18,6 +18,8 @@
 package io.github.java_native.libloader;
 
 import io.github.java_native.libloader.config.LibLoaderConfig;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -45,7 +47,14 @@ class ExtensibleNativeLibLoader extends AbstractExtensibleNativeLibLoader implem
     protected List<String> getLibraryPackagePath(final String libName, final String version) {
         ensureSystemDetected();
 
-        return getConfig().getLibraryPathFormatter().getFormattedPaths(getDetectedSystem(), libName, version);
+        final List<String> formattedPaths = getConfig().getLibraryPathFormatter().getFormattedPaths(getDetectedSystem(), libName, version);
+        final List<String> formattedPathsWoVersion = getConfig().getLibraryPathFormatter().getFormattedPaths(getDetectedSystem(), libName);
+
+        final List<String> paths = new ArrayList<String>(formattedPaths.size() + formattedPathsWoVersion.size());
+        paths.addAll(formattedPaths);
+        paths.addAll(formattedPathsWoVersion);
+
+        return Collections.unmodifiableList(paths);
     }
 
     @Override

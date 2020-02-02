@@ -135,9 +135,6 @@ public class DefaultLibraryPathFormatter implements LibraryPathFormatter {
             formattedPaths.addAll(doCreatePathForSystem(systemDefinition, libName, version, pathTemplate));
         }
 
-        // also add non-versioning paths.
-        formattedPaths.addAll(getFormattedPaths(systemDefinition, libName));
-
         return Collections.unmodifiableList(formattedPaths);
     }
 
