@@ -22,6 +22,7 @@ import io.github.java_native.libloader.systems.AbstractOsNameArchBitnessMatching
 import io.github.java_native.libloader.systems.Bitness;
 import io.github.java_native.libloader.systems.Endianess;
 import io.github.java_native.libloader.systems.SystemDefinitionConstants;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -66,8 +67,8 @@ public class BogoOs extends AbstractOsNameArchBitnessMatchingSystem {
     }
 
     @Override
-    public String getLibrarySuffix() {
-        return ".dynlib";
+    public List<String> getLibrarySuffixes() {
+        return Collections.singletonList(".dynlib");
     }
 
 

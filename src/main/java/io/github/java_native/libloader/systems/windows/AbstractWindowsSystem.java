@@ -20,6 +20,8 @@ package io.github.java_native.libloader.systems.windows;
 import io.github.java_native.libloader.systems.AbstractOsNameArchBitnessMatchingSystem;
 import io.github.java_native.libloader.systems.Endianess;
 import io.github.java_native.libloader.systems.SystemDefinition;
+import java.util.Collections;
+import java.util.List;
 
 public abstract class AbstractWindowsSystem extends AbstractOsNameArchBitnessMatchingSystem implements SystemDefinition {
 
@@ -44,8 +46,8 @@ public abstract class AbstractWindowsSystem extends AbstractOsNameArchBitnessMat
     }
 
     @Override
-    public String getLibrarySuffix() {
-        return ".dll";
+    public List<String> getLibrarySuffixes() {
+        return Collections.singletonList(".dll");
     }
 
 

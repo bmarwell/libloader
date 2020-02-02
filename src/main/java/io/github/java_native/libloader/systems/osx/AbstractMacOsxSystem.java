@@ -19,8 +19,16 @@ package io.github.java_native.libloader.systems.osx;
 
 import io.github.java_native.libloader.systems.AbstractOsNameArchBitnessMatchingSystem;
 import io.github.java_native.libloader.systems.Endianess;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public abstract class AbstractMacOsxSystem extends AbstractOsNameArchBitnessMatchingSystem {
+
+    private static final List<String> DEFAULT_FILENAME_EXTENSIONS = Collections.unmodifiableList(Arrays.asList(
+            ".dylib",
+            ".jnilib"
+    ));
 
     @Override
     public String getOsName() {
@@ -38,7 +46,7 @@ public abstract class AbstractMacOsxSystem extends AbstractOsNameArchBitnessMatc
     }
 
     @Override
-    public String getLibrarySuffix() {
-        return ".dylib";
+    public List<String> getLibrarySuffixes() {
+        return DEFAULT_FILENAME_EXTENSIONS;
     }
 }

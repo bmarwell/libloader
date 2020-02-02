@@ -19,8 +19,12 @@ package io.github.java_native.libloader.systems.linux;
 
 import io.github.java_native.libloader.systems.AbstractArm32System;
 import io.github.java_native.libloader.systems.Endianess;
+import java.util.Collections;
+import java.util.List;
 
 public abstract class AbstractLinuxArm32System extends AbstractArm32System {
+
+    private static final List<String> DEFAULT_FILENAME_EXTENSIONS = Collections.singletonList(".so");
 
     @Override
     public String getOsName() {
@@ -38,7 +42,7 @@ public abstract class AbstractLinuxArm32System extends AbstractArm32System {
     }
 
     @Override
-    public String getLibrarySuffix() {
-        return ".so";
+    public List<String> getLibrarySuffixes() {
+        return DEFAULT_FILENAME_EXTENSIONS;
     }
 }

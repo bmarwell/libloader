@@ -20,6 +20,8 @@ package io.github.java_native.libloader.systems.linux;
 import io.github.java_native.libloader.systems.AbstractOsNameArchBitnessMatchingSystem;
 import io.github.java_native.libloader.systems.Endianess;
 import io.github.java_native.libloader.systems.SystemDefinition;
+import java.util.Collections;
+import java.util.List;
 
 public abstract class AbstractLinuxSystem extends AbstractOsNameArchBitnessMatchingSystem implements SystemDefinition {
 
@@ -34,8 +36,8 @@ public abstract class AbstractLinuxSystem extends AbstractOsNameArchBitnessMatch
     }
 
     @Override
-    public String getLibrarySuffix() {
-        return ".so";
+    public List<String> getLibrarySuffixes() {
+        return Collections.singletonList(".so");
     }
 
     @Override

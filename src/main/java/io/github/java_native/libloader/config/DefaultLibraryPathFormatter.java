@@ -107,17 +107,7 @@ public class DefaultLibraryPathFormatter implements LibraryPathFormatter {
         final List<String> formattedPaths = new ArrayList<String>();
 
         for (final String pathTemplate : pathTemplates) {
-            final String formattedPath = String.format(Locale.ENGLISH,
-                    pathTemplate,
-                    systemDefinition.getNormalizedOsName(),
-                    systemDefinition.getArchitecture(),
-                    systemDefinition.getBitness().getBitness(),
-                    systemDefinition.getQualifier(),
-                    systemDefinition.getLibraryPrefix(),
-                    libName,
-                    systemDefinition.getLibrarySuffix()
-            );
-            formattedPaths.add(formattedPath);
+            formattedPaths.addAll(doCreatePathForSystem(systemDefinition, libName, null, pathTemplate));
         }
 
         return Collections.unmodifiableList(formattedPaths);
@@ -142,6 +132,22 @@ public class DefaultLibraryPathFormatter implements LibraryPathFormatter {
 
         final ArrayList<String> formattedPaths = new ArrayList<String>();
         for (final String pathTemplate : getPathTemplatesVersioned(systemDefinition)) {
+            formattedPaths.addAll(doCreatePathForSystem(systemDefinition, libName, version, pathTemplate));
+        }
+
+        // also add non-versioning paths.
+        formattedPaths.addAll(getFormattedPaths(systemDefinition, libName));
+
+        return Collections.unmodifiableList(formattedPaths);
+    }
+
+    private List<String> doCreatePathForSystem(final SystemDefinition systemDefinition,
+                                               final String libName,
+                                               final @Nullable String version,
+                                               final String pathTemplate) {
+        final List<String> formattedPaths = new ArrayList<String>();
+
+        for (final String suffix : systemDefinition.getLibrarySuffixes()) {
             final String formattedPath = String.format(Locale.ENGLISH,
                     pathTemplate,
                     systemDefinition.getNormalizedOsName(),
@@ -150,14 +156,11 @@ public class DefaultLibraryPathFormatter implements LibraryPathFormatter {
                     systemDefinition.getQualifier(),
                     systemDefinition.getLibraryPrefix(),
                     libName,
-                    systemDefinition.getLibrarySuffix(),
+                    suffix,
                     version
             );
             formattedPaths.add(formattedPath);
         }
-
-        // also add non-versioning paths.
-        formattedPaths.addAll(getFormattedPaths(systemDefinition, libName));
 
         return Collections.unmodifiableList(formattedPaths);
     }

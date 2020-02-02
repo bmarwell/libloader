@@ -32,11 +32,13 @@ public interface SystemDefinition extends SystemProperties {
     String getLibraryPrefix();
 
     /**
-     * Returns the library suffix, e.g. {@code lib} on Linux.
+     * Returns the potential library suffix, e.g. {@code .so} on Linux.
+     *
+     * <p>Usually this values are equal to the file extension.</p>
      *
      * @return a suffix or an empty String, but never {@code null}.
      */
-    String getLibrarySuffix();
+    List<String> getLibrarySuffixes();
 
     boolean matches(SystemProperties currentSystemProperties);
 
