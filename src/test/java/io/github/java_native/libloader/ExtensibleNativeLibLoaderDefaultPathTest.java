@@ -38,17 +38,17 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 @RunWith(Parameterized.class)
-public class ExtensibleNativeLibLoaderTest {
+public class ExtensibleNativeLibLoaderDefaultPathTest {
 
-    private static final Logger LOG = Logger.getLogger(ExtensibleNativeLibLoaderTest.class.getName());
+    private static final Logger LOG = Logger.getLogger(ExtensibleNativeLibLoaderDefaultPathTest.class.getName());
 
     private final SystemDefinition systemDefinition;
     private final String libName;
     private final String expectedPath;
 
-    public ExtensibleNativeLibLoaderTest(final SystemDefinition systemDefinition,
-                                         final String libName,
-                                         final String expectedPath) {
+    public ExtensibleNativeLibLoaderDefaultPathTest(final SystemDefinition systemDefinition,
+                                                    final String libName,
+                                                    final String expectedPath) {
         this.systemDefinition = systemDefinition;
         this.libName = libName;
         this.expectedPath = expectedPath;

@@ -27,7 +27,7 @@ import java.util.List;
 public interface LibraryPathFormatter {
 
     /**
-     * Returns a formatted path for the given library name and supplied system.
+     * Returns a formatted path for the given library name and supplied system.<br>
      *
      * @param systemDefinition
      *         the system to generate the library load path for.
@@ -41,6 +41,26 @@ public interface LibraryPathFormatter {
      */
     List<String> getFormattedPaths(SystemDefinition systemDefinition, String libName);
 
+    /**
+     * Returns a formatted path for the given library name, version and supplied system.<br>
+     *
+     * <p>If version is empty, it will not be appended. In this case the output
+     * is equal to {@link #getFormattedPaths(SystemDefinition, String)}.<br></p>
+     *
+     * <p>Will also return everything which {@link #getFormattedPaths(SystemDefinition, String)} returns.<br></p>
+     *
+     * @param systemDefinition
+     *         the system to generate the library load path for.
+     * @param libName
+     *         the library name to load, without prefix or suffix or file extension.
+     * @param version
+     *         the version number as string.
+     * @return the formatted path which can be loaded from a jar file.
+     * @throws IllegalArgumentException
+     *         if libName is empty or contains path separators or directory separators.
+     * @throws NullPointerException
+     *         if either parameter is {@code null}.
+     */
     List<String> getFormattedPaths(SystemDefinition systemDefinition, String libName, String version);
 
 }

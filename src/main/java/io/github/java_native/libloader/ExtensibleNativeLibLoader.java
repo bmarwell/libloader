@@ -42,6 +42,12 @@ class ExtensibleNativeLibLoader extends AbstractExtensibleNativeLibLoader implem
         return getConfig().getLibraryPathFormatter().getFormattedPaths(getDetectedSystem(), libName);
     }
 
+    protected List<String> getLibraryPackagePath(final String libName, final String version) {
+        ensureSystemDetected();
+
+        return getConfig().getLibraryPathFormatter().getFormattedPaths(getDetectedSystem(), libName, version);
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("ExtensibleNativeLibLoader{");

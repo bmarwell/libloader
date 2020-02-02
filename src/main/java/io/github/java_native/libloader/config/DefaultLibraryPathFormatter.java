@@ -99,6 +99,21 @@ public class DefaultLibraryPathFormatter implements LibraryPathFormatter {
 
     @Override
     public List<String> getFormattedPaths(final SystemDefinition systemDefinition, final String libName, final String version) {
+        if (libName.isEmpty()) {
+            throw new IllegalArgumentException("Empty library name provided");
+        }
+
+        if (libName.contains(File.separator) || libName.contains(File.pathSeparator)) {
+            throw new IllegalArgumentException(
+                    "library name contains illegal characters: [" + libName + "]. "
+                            + "Do not use '" + File.separator + "' or '" + File.pathSeparator + "'.");
+        }
+
+        if (version.trim().isEmpty()) {
+            // no version supplied.
+            return getFormattedPaths(systemDefinition, libName);
+        }
+
         final ArrayList<String> formattedPaths = new ArrayList<String>();
         // TODO: add versioned paths.
         // also add non-versioning paths.
