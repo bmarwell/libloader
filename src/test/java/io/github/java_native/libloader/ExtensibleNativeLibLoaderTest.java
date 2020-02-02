@@ -28,6 +28,7 @@ import io.github.java_native.libloader.systems.windows.WindowsX8632;
 import io.github.java_native.libloader.systems.windows.WindowsX8664;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.Assert;
@@ -71,10 +72,10 @@ public class ExtensibleNativeLibLoaderTest {
         final ExtensibleNativeLibLoader nativeLibLoader = new ExtensibleNativeLibLoader(new DefaultLibLoaderConfig());
         nativeLibLoader.setDetectedSystem(this.systemDefinition);
 
-        final String libraryPackagePath = nativeLibLoader.getLibraryPackagePath(this.libName);
+        final List<String> libraryPackagePath = nativeLibLoader.getLibraryPackagePath(this.libName);
         LOG.log(Level.INFO, "assert e[" + this.expectedPath + "] == a[" + libraryPackagePath + "]");
 
-        Assert.assertEquals(this.expectedPath, libraryPackagePath);
+        Assert.assertEquals(this.expectedPath, libraryPackagePath.get(0));
     }
 
 }

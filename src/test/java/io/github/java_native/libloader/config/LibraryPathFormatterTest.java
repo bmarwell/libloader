@@ -32,7 +32,7 @@ public class LibraryPathFormatterTest {
         final LibraryPathFormatter formatter = new DefaultLibraryPathFormatter();
         final LinuxX8664 linuxX8664 = new LinuxX8664();
         this.expectedException.expect(IllegalArgumentException.class);
-        formatter.getFormattedPath(linuxX8664, "");
+        formatter.getFormattedPaths(linuxX8664, "");
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -41,7 +41,7 @@ public class LibraryPathFormatterTest {
         final LibraryPathFormatter formatter = new DefaultLibraryPathFormatter();
         final LinuxX8664 linuxX8664 = new LinuxX8664();
         this.expectedException.expect(NullPointerException.class);
-        formatter.getFormattedPath(linuxX8664, null);
+        formatter.getFormattedPaths(linuxX8664, null);
     }
 
     @Test
@@ -49,6 +49,6 @@ public class LibraryPathFormatterTest {
         final LibraryPathFormatter formatter = new DefaultLibraryPathFormatter();
         final LinuxX8664 linuxX8664 = new LinuxX8664();
         this.expectedException.expect(IllegalArgumentException.class);
-        formatter.getFormattedPath(linuxX8664, ":;\\/");
+        formatter.getFormattedPaths(linuxX8664, ":;\\/");
     }
 }

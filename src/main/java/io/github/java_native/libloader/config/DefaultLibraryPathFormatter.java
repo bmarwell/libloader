@@ -20,6 +20,9 @@ package io.github.java_native.libloader.config;
 import io.github.java_native.libloader.internal.Nullable;
 import io.github.java_native.libloader.systems.SystemDefinition;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 
 public class DefaultLibraryPathFormatter implements LibraryPathFormatter {
@@ -41,8 +44,29 @@ public class DefaultLibraryPathFormatter implements LibraryPathFormatter {
 
     private static final @Nullable String OVERRIDE_PATH = System.getProperty("native.libloader.systempath", null);
 
+    private static List<String> getPathTemplate(final SystemDefinition systemDefinition) {
+        final ArrayList<String> templates = new ArrayList<String>();
+        if (null != OVERRIDE_PATH) {
+            templates.add(getOverriddenPathTemplate(OVERRIDE_PATH));
+        }
+
+        templates.addAll(getDefaultPathTemplates(systemDefinition));
+        return Collections.unmodifiableList(templates);
+    }
+
+    private static List<String> getDefaultPathTemplates(final SystemDefinition systemDefinition) {
+        final ArrayList<String> templates = new ArrayList<String>();
+
+        if (systemDefinition.getQualifier() != null) {
+            templates.add(FORMATTED_PATH_WITH_QUALIFIER);
+        }
+
+        templates.add(FORMATTED_PATH_WITHOUT_QUALIFIER);
+        return Collections.unmodifiableList(templates);
+    }
+
     @Override
-    public String getFormattedPath(final SystemDefinition systemDefinition, final String libName) {
+    public List<String> getFormattedPaths(final SystemDefinition systemDefinition, final String libName) {
         if (libName.isEmpty()) {
             throw new IllegalArgumentException("Empty library name provided");
         }
@@ -53,34 +77,33 @@ public class DefaultLibraryPathFormatter implements LibraryPathFormatter {
                             + "Do not use '" + File.separator + "' or '" + File.pathSeparator + "'.");
         }
 
-        final String pathTemplate = getPathTemplate(systemDefinition);
+        final List<String> pathTemplates = getPathTemplate(systemDefinition);
+        final List<String> formattedPaths = new ArrayList<String>();
 
-        return String.format(Locale.ENGLISH,
-                pathTemplate,
-                systemDefinition.getNormalizedOsName(),
-                systemDefinition.getArchitecture(),
-                systemDefinition.getBitness().getBitness(),
-                systemDefinition.getQualifier(),
-                systemDefinition.getLibraryPrefix(),
-                libName,
-                systemDefinition.getLibrarySuffix()
-        );
-    }
-
-    private static String getPathTemplate(final SystemDefinition systemDefinition) {
-        if (null != OVERRIDE_PATH) {
-            return getOverriddenPathTemplate(OVERRIDE_PATH);
+        for (final String pathTemplate : pathTemplates) {
+            final String formattedPath = String.format(Locale.ENGLISH,
+                    pathTemplate,
+                    systemDefinition.getNormalizedOsName(),
+                    systemDefinition.getArchitecture(),
+                    systemDefinition.getBitness().getBitness(),
+                    systemDefinition.getQualifier(),
+                    systemDefinition.getLibraryPrefix(),
+                    libName,
+                    systemDefinition.getLibrarySuffix()
+            );
+            formattedPaths.add(formattedPath);
         }
 
-        return getDefaultPathTemplate(systemDefinition);
+        return Collections.unmodifiableList(formattedPaths);
     }
 
-    private static String getDefaultPathTemplate(final SystemDefinition systemDefinition) {
-        if (systemDefinition.getQualifier() != null) {
-            return FORMATTED_PATH_WITH_QUALIFIER;
-        }
-
-        return FORMATTED_PATH_WITHOUT_QUALIFIER;
+    @Override
+    public List<String> getFormattedPaths(final SystemDefinition systemDefinition, final String libName, final String version) {
+        final ArrayList<String> formattedPaths = new ArrayList<String>();
+        // TODO: add versioned paths.
+        // also add non-versioning paths.
+        formattedPaths.addAll(getFormattedPaths(systemDefinition, libName));
+        throw new UnsupportedOperationException("TODO: implement.");
     }
 
     private static String getOverriddenPathTemplate(final String overridePath) {

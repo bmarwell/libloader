@@ -18,6 +18,7 @@
 package io.github.java_native.libloader;
 
 import io.github.java_native.libloader.config.LibLoaderConfig;
+import java.util.List;
 
 /**
  * Implemnentation of LibLoader which detects system configuration via ServiceLoaders.
@@ -35,10 +36,10 @@ class ExtensibleNativeLibLoader extends AbstractExtensibleNativeLibLoader implem
         return null;
     }
 
-    protected String getLibraryPackagePath(final String libName) {
+    protected List<String> getLibraryPackagePath(final String libName) {
         ensureSystemDetected();
 
-        return getConfig().getLibraryPathFormatter().getFormattedPath(getDetectedSystem(), libName);
+        return getConfig().getLibraryPathFormatter().getFormattedPaths(getDetectedSystem(), libName);
     }
 
     @Override

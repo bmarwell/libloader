@@ -18,6 +18,7 @@
 package io.github.java_native.libloader.config;
 
 import io.github.java_native.libloader.systems.SystemDefinition;
+import java.util.List;
 
 /**
  * A formatter takes a system definition and a library and will output a formatted path to load
@@ -38,6 +39,8 @@ public interface LibraryPathFormatter {
      * @throws NullPointerException
      *         if either parameter is {@code null}.
      */
-    String getFormattedPath(SystemDefinition systemDefinition, String libName);
+    List<String> getFormattedPaths(SystemDefinition systemDefinition, String libName);
+
+    List<String> getFormattedPaths(SystemDefinition systemDefinition, String libName, String version);
 
 }
