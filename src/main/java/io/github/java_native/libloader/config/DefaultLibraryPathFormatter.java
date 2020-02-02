@@ -21,6 +21,7 @@ import io.github.java_native.libloader.internal.Nullable;
 import io.github.java_native.libloader.systems.SystemDefinition;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -34,13 +35,27 @@ public class DefaultLibraryPathFormatter implements LibraryPathFormatter {
     private static final String BITNESS = "%3$s";
     private static final String DEFAULT_QUALIFIER_PATH = OS_NAME + SEPARATOR + ARCH + SEPARATOR + BITNESS;
     private static final String QUALIFIER = "%4$s";
-    private static final String PREFIX_LIBNAME_SUFFIX = "%5$s%6$s%7$s";
+    private static final String PREFIX = "%5$s";
+    private static final String LIBRARY_NAME = "%6$s";
+    private static final String FILE_EXTENSION = "%7$s";
+    private static final String VERSION = "%8$s";
+    private static final String PREFIX_LIBNAME_SUFFIX = PREFIX + LIBRARY_NAME + FILE_EXTENSION;
+
+    private static final String PREFIX_LIBNAME_SUFFIX_VERSIONED = PREFIX + LIBRARY_NAME + "-" + VERSION + FILE_EXTENSION;
+
     private static final String FORMATTED_PATH_WITH_QUALIFIER = NATIVES_ROOT_FOLDER
             + "/" + DEFAULT_QUALIFIER_PATH + SEPARATOR + QUALIFIER
             + "/" + PREFIX_LIBNAME_SUFFIX;
     private static final String FORMATTED_PATH_WITHOUT_QUALIFIER = NATIVES_ROOT_FOLDER
             + "/" + DEFAULT_QUALIFIER_PATH
             + "/" + PREFIX_LIBNAME_SUFFIX;
+
+    private static final String FORMATTED_PATH_WITH_VERSION_QUALIFIER = NATIVES_ROOT_FOLDER
+            + "/" + DEFAULT_QUALIFIER_PATH + SEPARATOR + QUALIFIER
+            + "/" + PREFIX_LIBNAME_SUFFIX_VERSIONED;
+    private static final String FORMATTED_PATH_WITH_VERSION_WITHOUT_QUALIFIER = NATIVES_ROOT_FOLDER
+            + "/" + DEFAULT_QUALIFIER_PATH
+            + "/" + PREFIX_LIBNAME_SUFFIX_VERSIONED;
 
     private static final @Nullable String OVERRIDE_PATH = System.getProperty("native.libloader.systempath", null);
 
@@ -62,6 +77,17 @@ public class DefaultLibraryPathFormatter implements LibraryPathFormatter {
         }
 
         templates.add(FORMATTED_PATH_WITHOUT_QUALIFIER);
+        return Collections.unmodifiableList(templates);
+    }
+
+    private Collection<String> getPathTemplatesVersioned(final SystemDefinition systemDefinition) {
+        final ArrayList<String> templates = new ArrayList<String>();
+
+        if (systemDefinition.getQualifier() != null) {
+            templates.add(FORMATTED_PATH_WITH_VERSION_QUALIFIER);
+        }
+
+        templates.add(FORMATTED_PATH_WITH_VERSION_WITHOUT_QUALIFIER);
         return Collections.unmodifiableList(templates);
     }
 
@@ -115,11 +141,27 @@ public class DefaultLibraryPathFormatter implements LibraryPathFormatter {
         }
 
         final ArrayList<String> formattedPaths = new ArrayList<String>();
-        // TODO: add versioned paths.
+        for (final String pathTemplate : getPathTemplatesVersioned(systemDefinition)) {
+            final String formattedPath = String.format(Locale.ENGLISH,
+                    pathTemplate,
+                    systemDefinition.getNormalizedOsName(),
+                    systemDefinition.getArchitecture(),
+                    systemDefinition.getBitness().getBitness(),
+                    systemDefinition.getQualifier(),
+                    systemDefinition.getLibraryPrefix(),
+                    libName,
+                    systemDefinition.getLibrarySuffix(),
+                    version
+            );
+            formattedPaths.add(formattedPath);
+        }
+
         // also add non-versioning paths.
         formattedPaths.addAll(getFormattedPaths(systemDefinition, libName));
-        throw new UnsupportedOperationException("TODO: implement.");
+
+        return Collections.unmodifiableList(formattedPaths);
     }
+
 
     private static String getOverriddenPathTemplate(final String overridePath) {
         return overridePath + "/" + PREFIX_LIBNAME_SUFFIX;
